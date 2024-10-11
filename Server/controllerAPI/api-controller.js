@@ -147,6 +147,7 @@ router.get("/searchFundraiser",(req, res)=>{
         });
         sql+=")" // Right bracket
     }
+    // query the data from database
     connection.execute(sql, queryParam,(err, records)=>{
         if(err){
             console.error("An error occurred while searching", err);
@@ -163,7 +164,7 @@ router.get("/searchFundraiser",(req, res)=>{
 router.get('/fundraiser/:id',  (req, res) => {
     const { id } = req.params;
     const sql=` SELECT * FROM fundraiser JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE FUNDRAISER_ID = ?`
-    connection.query(sql,[id],(err,records,fields) => {
+    connection.execute(sql,[id],(err,records,fields) => {
         if (err) {
             console.error('Error retrieving product:', err);
         } else {
@@ -173,17 +174,22 @@ router.get('/fundraiser/:id',  (req, res) => {
 });
 /**
  * POST Donation
- * This api will post the
+ * This api will create a record to DONATION table
+ * and add the amount of how much the user donated into the FUNDRAISER table.
  */
 
 router.post("/donation", (req, res) => {
+    // read variables from front-end
     let amount = req.body.amount;
     let giver = req.body.giver;
     let fundraiserId = req.body.fundraiserId;
+    // Generate a date message
     const date = new Date();
+    // initialize sql query
     let sql1 = `INSERT INTO donation (AMOUNT, GIVER, FUNDRAISER_ID, DATE) VALUES (?,?,?,?)`
     let sql2 = `UPDATE fundraiser SET CURRENT_FUNDING = CURRENT_FUNDING + ? WHERE FUNDRAISER_ID = ?`
-    connection.query(sql1,[amount,giver,fundraiserId,date],(err, records)=>{
+    // First query to add a donation record
+    connection.execute(sql1,[amount,giver,fundraiserId,date],(err, records)=>{
         if(err){
             console.error('Error inserting data:', err);
         }
@@ -191,7 +197,8 @@ router.post("/donation", (req, res) => {
             res.send({message: "insert success"});
         }
     })
-    connection.query(sql2,[amount,fundraiserId],(err, records)=>{
+    // Second query to add the payment
+    connection.execute(sql2,[amount,fundraiserId],(err, records)=>{
         if(err){
             console.error('Error changing data:', err);
         }
@@ -200,20 +207,49 @@ router.post("/donation", (req, res) => {
         }
     })
 });
+/**
+ *  POST Fundraiser
+ *  This api will create a new fundraiser record
+ */
 router.post("/fundraiser", (req, res) => {
+    // read variables from front-end
     let organizer = req.body.organizer;
     let caption = req.body.caption;
     let targetFunding = req.body.targetFunding;
     let city = req.body.city;
     let categoryId = req.body.categoryId;
+    // initialize sql query
     let sql = `INSERT INTO fundraiser(ORGANIZER, CAPTION, TARGET_FUNDING, CITY, CATEGORY_ID) VALUES(?,?,?,?,?)`
 
-    connection.query(sql,[organizer, caption, targetFunding, city, categoryId],(err, records)=>{
+    connection.execute(sql,[organizer, caption, targetFunding, city, categoryId],(err, records)=>{
         if(err){
             console.error('Error inserting data:', err);
         }
         else{
             res.send({message: "insert success"});
+        }
+    })
+})
+/**
+ * PUT Fundraiser
+ * This api can be used to update something for the fundraiser.
+ */
+router.put("/fundraiser/:id", (req, res) => {
+    const { id } = req.params; // read id to select the target fundraiser.
+    // read variables from front-end
+    let organizer = req.body.organizer;
+    let caption = req.body.caption;
+    let targetFunding = req.body.targetFunding;
+    let city = req.body.city;
+    let categoryId = req.body.categoryId;
+    // initialize sql query
+    let sql= "UPDATE fundraiser SET ORGANIZER "+ organizer + ", CAPTION = " + caption +", TARGET_FUNDING = " + targetFunding + ", CITY = " + city + ", CATEGORY_ID = "+ categoryId +" WHERE ID = "+ id +";" // initialize sql command
+    connection.query(sql,(err,records)=>{
+        if(err){
+            console.error('Error while changing data:', err);
+        }
+        else{
+            res.send({message: "change success"});
         }
     })
 })
