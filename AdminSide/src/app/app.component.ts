@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'AdminSide';
+  title = 'A3-AdminSide';
+  public sample:string ="";
 }
