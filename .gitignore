@@ -22,5 +22,5 @@ tests/
 .env.local
 .vscode-server/
 .history/
-
+ClientSide/
 
