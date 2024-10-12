@@ -54,7 +54,7 @@ CREATE TABLE `donation` (
   `FUNDRAISER_ID` int NOT NULL,
   PRIMARY KEY (`DONATION_ID`),
   KEY `donation_fundraiser_FUNDRAISER_ID_fk` (`FUNDRAISER_ID`),
-  CONSTRAINT `donation_fundraiser_FUNDRAISER_ID_fk` FOREIGN KEY (`FUNDRAISER_ID`) REFERENCES `fundraiser` (`FUNDRAISER_ID`)
+  CONSTRAINT `donation_fundraiser_FUNDRAISER_ID_fk` FOREIGN KEY (`FUNDRAISER_ID`) REFERENCES `fundraiser` (`FUNDRAISER_ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

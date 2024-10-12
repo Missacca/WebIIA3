@@ -163,7 +163,7 @@ router.get("/searchFundraiser",(req, res)=>{
  */
 router.get('/fundraiser/:id',  (req, res) => {
     const { id } = req.params;
-    const sql=` SELECT * FROM fundraiser JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE FUNDRAISER_ID = ?`
+    const sql=` SELECT f.FUNDRAISER_ID, f.ORGANIZER, f.CAPTION, f.TARGET_FUNDING, f.CURRENT_FUNDING,f.CITY, f.ACTIVE, f.CATEGORY_ID, c.Category_Name, d.DONATION_ID, d.DATE, d.AMOUNT, d.GIVER FROM fundraiser f LEFT JOIN category c ON f.CATEGORY_ID = c.CATEGORY_ID  LEFT JOIN  donation d ON f.FUNDRAISER_ID = d.FUNDRAISER_ID  WHERE f.FUNDRAISER_ID = ?;`
     connection.execute(sql,[id],(err,records,fields) => {
         if (err) {
             console.error('Error retrieving product:', err);
@@ -243,8 +243,10 @@ router.put("/fundraiser/:id", (req, res) => {
     let city = req.body.city;
     let categoryId = req.body.categoryId;
     // initialize sql query
-    let sql= "UPDATE fundraiser SET ORGANIZER "+ organizer + ", CAPTION = " + caption +", TARGET_FUNDING = " + targetFunding + ", CITY = " + city + ", CATEGORY_ID = "+ categoryId +" WHERE ID = "+ id +";" // initialize sql command
-    connection.query(sql,(err,records)=>{
+    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ? WHERE ID = ?`; // initialize sql command
+    let values = [organizer, caption, targetFunding, city, categoryId, id];
+
+    connection.query(sql, values,(err,records)=>{
         if(err){
             console.error('Error while changing data:', err);
         }
@@ -253,5 +255,33 @@ router.put("/fundraiser/:id", (req, res) => {
         }
     })
 })
+
+/**
+ * DELETE Fundraiser details
+ * This API will need the id of fundraiser and respond the detail of the fundraiser.
+ */
+router.delete('/deleteFundraiser/:id',  (req, res) => {
+    const { id } = req.params;
+    // SQL query to delete donations related to the fundraiser first
+    // Execute the first SQL to delete related donations
+    connection.execute(deleteDonations, [fundraiserId], (err, result) => {
+        if (err) {
+            console.log("Error deleting donations related to fundraiser", err);
+            return res.status(500).send("Error deleting related donations.");
+        }
+    let deleteDonations = `DELETE FROM donation WHERE FUNDRAISER_ID = ?`;
+    const sql=`DELETE FROM FUNDRAISER WHERE FUNDRAISER_ID = ?`
+    connection.execute(sql,[id],(err,records,fields) => {
+        if (err) {
+            console.error('Error retrieving product:', err);
+        } else {
+            if (result.affectedRows === 0) {
+                return res.send("Fundraiser not found.");
+            }
+            res.send(`Fundraiser with ID ${fundraiserId} successfully deleted.`);
+        }
+       });
+    });
+});
 // Export router
 module.exports = router;

@@ -18,7 +18,7 @@ const dataServer = express();
 // let all access pass
 dataServer.use(cors());
 dataServer.use(bodyParser.json());
-dataServer.use(bodyParser.urlencoded({ extended: false }));
+dataServer.use(bodyParser.urlencoded({ extended: true }));
 
 
 dataServer.use("/api", databaseAPI); // call the controller api
