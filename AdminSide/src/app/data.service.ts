@@ -7,7 +7,7 @@ import {Fundraiser} from "./models/fundraiser";
   providedIn: 'root'
 })
 export class DataService {
-  private url: string = "http://localhost:8080/api";
+  private url: string = "http://localhost:8888/api";
   constructor(private http: HttpClient) {}
 
   /**
@@ -15,5 +15,17 @@ export class DataService {
    */
   public getActiveFundraisers(): Observable<Fundraiser>{
     return this.http.get<Fundraiser>(this.url + "/getActiveFundraiser");
+  }
+
+  public addFundraiser(fundraiser: any): Observable<any> {
+    return this.http.post(this.url+"/donation", fundraiser);
+  }
+
+  public updateFundraiser(id: string, fundraiser: any): Observable<any> {
+    return this.http.put(`${this.url}/fundraiser/${id}`, fundraiser);
+  }
+
+  public  deleteFundraiser(id: string): Observable<any> {
+    return this.http.delete(`${this.url}/deleteFundraiser/${id}`);
   }
 }
