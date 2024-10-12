@@ -243,7 +243,7 @@ router.put("/fundraiser/:id", (req, res) => {
     let city = req.body.city;
     let categoryId = req.body.categoryId;
     // initialize sql query
-    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ? WHERE ID = ?`; // initialize sql command
+    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ? WHERE FUNDRAISER_ID = ?`; // initialize sql command
     let values = [organizer, caption, targetFunding, city, categoryId, id];
 
     connection.query(sql, values,(err,records)=>{
@@ -255,33 +255,41 @@ router.put("/fundraiser/:id", (req, res) => {
         }
     })
 })
-
 /**
  * DELETE Fundraiser details
- * This API will need the id of fundraiser and respond the detail of the fundraiser.
+ * This API will need the id of fundraiser and respond with the details of the fundraiser.
  */
-router.delete('/deleteFundraiser/:id',  (req, res) => {
-    const { id } = req.params;
+router.delete('/deleteFundraiser/:id', (req, res) => {
+    const id = req.params.id;
+
     // SQL query to delete donations related to the fundraiser first
+    let deleteDonations = `DELETE FROM donation WHERE FUNDRAISER_ID = ?`;
+
     // Execute the first SQL to delete related donations
-    connection.execute(deleteDonations, [fundraiserId], (err, result) => {
+    connection.execute(deleteDonations, [id], (err, result) => {
         if (err) {
             console.log("Error deleting donations related to fundraiser", err);
-            return res.status(500).send("Error deleting related donations.");
+            return res.send("Error deleting related donations.");
         }
-    let deleteDonations = `DELETE FROM donation WHERE FUNDRAISER_ID = ?`;
-    const sql=`DELETE FROM FUNDRAISER WHERE FUNDRAISER_ID = ?`
-    connection.execute(sql,[id],(err,records,fields) => {
-        if (err) {
-            console.error('Error retrieving product:', err);
-        } else {
+
+        // Proceed to delete the fundraiser even if no donations were found
+        const deleteFundraiserSql = `DELETE FROM fundraiser WHERE FUNDRAISER_ID = ?`;
+
+        connection.execute(deleteFundraiserSql, [id], (err, result) => {
+            if (err) {
+                console.error('Error deleting fundraiser:', err);
+                return res.send("Error deleting fundraiser.");
+            }
+
+            // Check if the fundraiser was actually deleted
             if (result.affectedRows === 0) {
                 return res.send("Fundraiser not found.");
             }
-            res.send(`Fundraiser with ID ${fundraiserId} successfully deleted.`);
-        }
-       });
+
+            res.send(`Fundraiser with ID ${id} successfully deleted.`);
+        });
     });
 });
+
 // Export router
 module.exports = router;
