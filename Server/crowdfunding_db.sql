@@ -26,7 +26,7 @@ CREATE TABLE `category` (
   `CATEGORY_ID` int NOT NULL AUTO_INCREMENT,
   `Category_Name` varchar(255) NOT NULL,
   PRIMARY KEY (`CATEGORY_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Health'),(2,'Education'),(3,'Children'),(4,'Pool');
+INSERT INTO `category` VALUES (1,'Health'),(2,'Education'),(3,'Children'),(4,'Poor'),(5,'Piece');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,7 +54,7 @@ CREATE TABLE `donation` (
   `FUNDRAISER_ID` int NOT NULL,
   PRIMARY KEY (`DONATION_ID`),
   KEY `donation_fundraiser_FUNDRAISER_ID_fk` (`FUNDRAISER_ID`),
-  CONSTRAINT `donation_fundraiser_FUNDRAISER_ID_fk` FOREIGN KEY (`FUNDRAISER_ID`) REFERENCES `fundraiser` (`FUNDRAISER_ID`) ON DELETE CASCADE
+  CONSTRAINT `donation_fundraiser_FUNDRAISER_ID_fk` FOREIGN KEY (`FUNDRAISER_ID`) REFERENCES `fundraiser` (`FUNDRAISER_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,7 +64,7 @@ CREATE TABLE `donation` (
 
 LOCK TABLES `donation` WRITE;
 /*!40000 ALTER TABLE `donation` DISABLE KEYS */;
-INSERT INTO `donation` VALUES (1,'2024-09-01',100.00,'Alice',1),(2,'2024-09-05',250.00,'Bob',2),(3,'2024-09-10',500.00,'Charlie',7),(4,'2024-09-12',150.00,'David',6),(5,'2024-09-15',75.00,'Eva',2),(6,'2024-09-20',200.00,'Frank',5),(7,'2024-09-22',300.00,'Grace',8),(8,'2024-09-25',125.00,'Hank',6),(9,'2024-09-28',400.00,'Ivy',9),(10,'2024-09-30',175.00,'Jack',3);
+INSERT INTO `donation` VALUES (1,'2024-09-01',100.00,'Alice',1),(2,'2024-09-05',250.00,'Bob',2),(3,'2024-09-10',500.00,'Charlie',3),(4,'2024-09-12',150.00,'David',2),(5,'2024-09-15',75.00,'Eva',4),(6,'2024-09-20',200.00,'Frank',5),(7,'2024-09-22',300.00,'Grace',4),(8,'2024-09-25',125.00,'Hank',2),(9,'2024-09-28',400.00,'Ivy',1),(10,'2024-09-30',175.00,'Jack',3);
 /*!40000 ALTER TABLE `donation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ CREATE TABLE `fundraiser` (
   PRIMARY KEY (`FUNDRAISER_ID`),
   KEY `CATEGORY_ID` (`CATEGORY_ID`),
   CONSTRAINT `fundraiser_ibfk_1` FOREIGN KEY (`CATEGORY_ID`) REFERENCES `category` (`CATEGORY_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE `fundraiser` (
 
 LOCK TABLES `fundraiser` WRITE;
 /*!40000 ALTER TABLE `fundraiser` DISABLE KEYS */;
-INSERT INTO `fundraiser` VALUES (1,'Frankly','Support Local Hospital',50000.00,20000.00,'Melbourne',1,1),(2,'Vitten','Scholarship Fund for Students',30000.00,10000.00,'Sydney',1,2),(3,'Broky','Clean Water Project',15000.00,5000.00,'GoldCoast',1,3),(4,'Niko','Save the Forest Campaign',40000.00,25000.00,'Shanghai',0,3),(5,'Rain','Build a Community Center',70000.00,45000.00,'Liuzhou',1,2),(6,'Aleksib','Build a Hospital',900000.00,500.00,'New York',0,1),(7,'Bit','donated 700 dollar',700.00,400.00,'Sydney',1,2),(8,'Hobbit','donated 5000 dollar',5000.00,400.00,'Sydney',0,4),(9,'Eva','donated 900 dollar',900.00,145.00,'New York',1,3),(10,'Allar','donated 100 books for children',1290.00,1155.00,'Perth',1,3),(11,'S1mple','donated 1000 dollar',1000.00,500.00,'Beijing',1,1);
+INSERT INTO `fundraiser` VALUES (1,'Bit','donated 700 dollar',700.00,400.00,'Sydney',1,2),(2,'Hobbit','donated 5000 dollar',5000.00,400.00,'Sydney',0,4),(3,'Eva','donated 900 dollar',900.00,145.00,'New York',1,3),(4,'Allar','donated 100 books for children',1290.00,1155.00,'Perth',1,3),(5,'Simple','donated 1000 dollar',1000.00,500.00,'Beijing',1,5),(6,'Frankly','Support Local Hospital',50000.00,20000.00,'Melbourne',1,1),(7,'Vitten','Scholarship Fund for Students',30000.00,10000.00,'Sydney',1,2),(8,'Broky','Clean Water Project',15000.00,5000.00,'GoldCoast',1,3),(9,'Niko','Save the Forest Campaign',40000.00,25000.00,'Shanghai',0,4),(10,'Aleksib','Build a Hospital',900000.00,500.00,'New York',0,1);
 /*!40000 ALTER TABLE `fundraiser` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -109,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-10  0:28:02
+-- Dump completed on 2024-10-12 22:19:04
