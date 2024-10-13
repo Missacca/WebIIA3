@@ -22,7 +22,7 @@ connection.connect()
  */
 router.get("/getActiveFundraiser", (req, res) => { // use express router to make a GET API
     connection.query( // mysql query
-        "SELECT * FROM `FUNDRAISER` where `ACTIVE` = '1'", // select data which is activated
+        "SELECT * FROM `fundraiser` JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE `ACTIVE` = '1'", // select data which is activated
         (err,records)=>{ // get result
             if(err){ // if error occurred
                 console.error("An error occurred while querying FUNDRAISER", err) // send an error message
@@ -38,7 +38,23 @@ router.get("/getActiveFundraiser", (req, res) => { // use express router to make
  * Get Categories
  * The following part will get some categories for the search page.
  */
-
+/**
+ * GET All Fundraisers
+ * This method will retrieve data and display in Home page
+ */
+router.get("/getAllFundraiser", (req, res) => { // use express router to make a GET API
+    connection.query( // mysql query
+        "SELECT * FROM `FUNDRAISER` ", // select data which is activated
+        (err,records)=>{ // get result
+            if(err){ // if error occurred
+                console.error("An error occurred while querying FUNDRAISER", err) // send an error message
+            }
+            else{
+                res.send(records); // send result
+            }
+        }
+    )
+});
 /**
  * GET CATEGORY
  * This API will get all categories from the database
@@ -86,7 +102,21 @@ router.get("/getCity",(req, res)=>{
        }
    });
 });
-
+/**
+ * GET The last one's ID
+ * This method will use to get the last one's ID to insert the new number
+ */
+router.get('/getLastFundraiserId', (req, res) => {
+    const sql = 'SELECT MAX(FUNDRAISER_ID) AS maxId FROM FUNDRAISER';
+    connection.query(sql, (error, results) => {
+      if (error) {
+        return res.status(500).json({ error });
+      }
+      const maxId = results[0].maxId || 0; 
+      res.json(maxId);
+    });
+  });
+  
 /**
  * GET Specific category fundraiser
  * This method will need user select specific category to search fundraisers
@@ -138,7 +168,7 @@ router.get("/searchFundraiser",(req, res)=>{
         let array = category.split(","); // split the input string
         i =array.length;
         array.forEach((item)=>{ // loop through the array
-            sql += "`NAME` = ?"; // add city into the sql
+            sql += "`Category_Name` = ?"; // add city into the sql
             queryParam.push(item); // add parameter
             if(i>1){ // if more than 1 city selected
                 sql+=" OR " // use OR to select more than one parameter
@@ -157,6 +187,21 @@ router.get("/searchFundraiser",(req, res)=>{
         }
     })
 });
+/**
+ * Get Fundraiser by id
+ * This will return the detail of fundraiser exclude donation details
+ */
+router.get("/getFundraiserById/:id", (req, res)=>{
+    const { id } = req.params;
+    const sql = `SELECT * FROM \`fundraiser\` JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE FUNDRAISER_ID = ?`
+    connection.execute(sql,[id],(err,records,fields) => {
+        if (err) {
+            console.error('Error retrieving data:', err);
+        } else {
+            res.send(records);
+        }
+    });
+})
 /**
  * GET Fundraiser details
  * This API will need the id of fundraiser and respond the detail of the fundraiser.
@@ -177,7 +222,17 @@ router.get('/fundraiser/:id',  (req, res) => {
  * This api will create a record to DONATION table
  * and add the amount of how much the user donated into the FUNDRAISER table.
  */
-
+router.get("/getDonation/:id", (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM donation WHERE FUNDRAISER_ID = ?`
+    connection.execute(sql,[id],(err,records,fields) => {
+        if (err) {
+            console.error('Error retrieving data:', err);
+        } else {
+            res.send(records);
+        }
+    });
+})
 router.post("/donation", (req, res) => {
     // read variables from front-end
     let amount = req.body.amount;
@@ -193,9 +248,6 @@ router.post("/donation", (req, res) => {
         if(err){
             console.error('Error inserting data:', err);
         }
-        else{
-            res.send({message: "insert success"});
-        }
     })
     // Second query to add the payment
     connection.execute(sql2,[amount,fundraiserId],(err, records)=>{
@@ -203,7 +255,7 @@ router.post("/donation", (req, res) => {
             console.error('Error changing data:', err);
         }
         else{
-            res.send({message: "change success"});
+            res.send({message: "inserting and change success"});
         }
     })
 });
@@ -218,10 +270,11 @@ router.post("/fundraiser", (req, res) => {
     let targetFunding = req.body.targetFunding;
     let city = req.body.city;
     let categoryId = req.body.categoryId;
+    let active = req.body.active;
     // initialize sql query
-    let sql = `INSERT INTO fundraiser(ORGANIZER, CAPTION, TARGET_FUNDING, CITY, CATEGORY_ID) VALUES(?,?,?,?,?)`
+    let sql = `INSERT INTO fundraiser(ORGANIZER, CAPTION, TARGET_FUNDING, CITY, CATEGORY_ID, ACTIVE) VALUES(?,?,?,?,?,?)`
 
-    connection.execute(sql,[organizer, caption, targetFunding, city, categoryId],(err, records)=>{
+    connection.execute(sql,[organizer, caption, targetFunding, city, categoryId,active],(err, records)=>{
         if(err){
             console.error('Error inserting data:', err);
         }
@@ -242,9 +295,10 @@ router.put("/fundraiser/:id", (req, res) => {
     let targetFunding = req.body.targetFunding;
     let city = req.body.city;
     let categoryId = req.body.categoryId;
+    let active = req.body.active;
     // initialize sql query
-    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ? WHERE FUNDRAISER_ID = ?`; // initialize sql command
-    let values = [organizer, caption, targetFunding, city, categoryId, id];
+    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ?, ACTIVE = ? WHERE FUNDRAISER_ID = ?`; // initialize sql command
+    let values = [organizer, caption, targetFunding, city, categoryId, active, id];
 
     connection.query(sql, values,(err,records)=>{
         if(err){

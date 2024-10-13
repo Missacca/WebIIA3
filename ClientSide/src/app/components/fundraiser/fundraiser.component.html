@@ -1,0 +1,43 @@
+<div class="container">
+
+  <div class="top">
+    <h1>{{fundraiser.CAPTION}}</h1>
+  </div>
+  <div class="middle">
+    <h3>Post by {{fundraiser.ORGANIZER}}</h3>
+    <mat-card>
+      <p>Target Funding: {{fundraiser.TARGET_FUNDING}}</p>
+      <p>Current Funding: {{fundraiser.CURRENT_FUNDING}}</p>
+      <p>City: {{fundraiser.CITY}}</p>
+      <p>Category: {{fundraiser.Category_Name}}</p>
+
+      <button routerLink="/donate/{{fundraiser.FUNDRAISER_ID}}">Donate</button>
+    </mat-card>
+  </div>
+  <div class="middle">
+    <h3>Donates</h3>
+    <table mat-table [dataSource]="donations" class="mat-elevation-z8">
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let donation">{{ donation.DATE | date:'yyyy-MM-dd' }}</td>
+      </ng-container>
+
+      <!-- Amount Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let donation">{{ donation.AMOUNT }}</td>
+      </ng-container>
+
+      <!-- Giver Column -->
+      <ng-container matColumnDef="giver">
+        <th mat-header-cell *matHeaderCellDef>Giver</th>
+        <td mat-cell *matCellDef="let donation">{{ donation.GIVER }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

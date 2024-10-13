@@ -31,7 +31,6 @@ import {
   MatHeaderRowDef, MatRow, MatRowDef,
   MatTable
 } from "@angular/material/table";
-import {MatInput} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -77,7 +76,6 @@ import {MatInput} from "@angular/material/input";
     MatRowDef,
     MatRow,
     MatHeaderRow,
-    MatInput,
   ],
   providers: [
     provideAnimationsAsync()

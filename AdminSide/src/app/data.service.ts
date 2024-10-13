@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Fundraiser} from "./models/fundraiser";
+import {Fundraiser} from "./fundraiser";
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +13,26 @@ export class DataService {
   /**
    * API START HERE
    */
-  public getActiveFundraisers(): Observable<Fundraiser>{
-    return this.http.get<Fundraiser>(this.url + "/getActiveFundraiser");
+  public getAllFundraisers(): Observable<Fundraiser[]>{
+    return this.http.get<Fundraiser[]>(this.url + "/getAllFundraiser");
   }
 
-  public addFundraiser(fundraiser: any): Observable<any> {
-    return this.http.post(this.url+"/donation", fundraiser);
+  public getOneFundraiser(id: number):Observable<Fundraiser[]>{
+  return this.http.get<Fundraiser[]>(`${this.url}/fundraiser/${id}`);
+}
+  public addFundraiser(fundraiser: any): Observable<Fundraiser> {
+    return this.http.post<any>(this.url+"/fundraiser", fundraiser);
   }
 
-  public updateFundraiser(id: string, fundraiser: any): Observable<any> {
+  public updateFundraiser(id: number, fundraiser: any): Observable<any> {
     return this.http.put(`${this.url}/fundraiser/${id}`, fundraiser);
   }
 
-  public  deleteFundraiser(id: string): Observable<any> {
-    return this.http.delete(`${this.url}/deleteFundraiser/${id}`);
+  public  deleteFundraiser(id: number): Observable<any> {
+    return this.http.delete(`${this.url}/deleteFundraiser/${id}`, { responseType: 'text' });
   }
+  public  getLastFundraiserId(): Observable<number> {
+    return this.http.get<number>(`${this.url}/getLastFundraiserId`); // 你需要实现这个 API
+  }
+
 }

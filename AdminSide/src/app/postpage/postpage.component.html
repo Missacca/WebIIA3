@@ -1,0 +1,75 @@
+<h2>Update Fundraiser</h2>
+<form (ngSubmit)="updateFundraiser()" #fundraiserForm="ngForm">
+  <label for="organizer">Organizer Name:</label>
+  <input type="text" id="organizer"
+         [(ngModel)]="selectedFundraiser.ORGANIZER"
+         name="organizer"
+         required
+         pattern="[A-Za-z\s]+"
+         #organizerInput="ngModel" />
+  <div *ngIf="organizerInput.invalid && (organizerInput.dirty || organizerInput.touched)">
+    <div *ngIf="organizerInput.errors?.['required']">Organizer Name is required.</div>
+    <div *ngIf="organizerInput.errors?.['pattern']" style="color:red">Only letters and spaces are allowed.</div>
+  </div>
+  <br>
+
+  <label for="caption">Caption:</label>
+  <input type="text" id="caption"
+         [(ngModel)]="selectedFundraiser.CAPTION"
+         name="caption"
+         required
+         pattern="[A-Za-z0-9\s]+"
+         #captionInput="ngModel" />
+  <div *ngIf="captionInput.invalid && (captionInput.dirty || captionInput.touched)">
+    <div *ngIf="captionInput.errors?.['required']">Caption is required.</div>
+    <div *ngIf="captionInput.errors?.['pattern']" style="color:red">Only letters, numbers, and spaces are allowed.</div>
+  </div>
+  <br>
+
+  <label for="TARGET_funding">Target Funding:</label>
+  <input type="number" id="TARGET_funding"
+         [(ngModel)]="selectedFundraiser.TARGET_FUNDING"
+         name="TARGET_funding"
+         required
+         min="0"
+         #targetFundingInput="ngModel" />
+  <div *ngIf="targetFundingInput.invalid && (targetFundingInput.dirty || targetFundingInput.touched)">
+    <div *ngIf="targetFundingInput.errors?.['required']">Target Funding is required.</div>
+    <div *ngIf="targetFundingInput.errors?.['min']" style="color:red">Target Funding must be a positive number.</div>
+  </div>
+  <br>
+
+  <label for="CITY">City:</label>
+  <input type="text" id="CITY"
+         [(ngModel)]="selectedFundraiser.CITY"
+         name="CITY"
+         required
+         pattern="[A-Za-z\s]+"
+         #cityInput="ngModel" />
+  <div *ngIf="cityInput.invalid && (cityInput.dirty || cityInput.touched)">
+    <div *ngIf="cityInput.errors?.['required']">City is required.</div>
+    <div *ngIf="cityInput.errors?.['pattern']" style="color:red">Only letters and spaces are allowed.</div>
+  </div>
+  <br>
+
+  <label for="category">Category:</label>
+  <select id="category"
+          [(ngModel)]="selectedFundraiser.CATEGORY_ID"
+          name="category"
+          required
+          #categoryInput="ngModel">
+    <option value="" disabled>Select a category</option>
+    <option value="1">Health</option>
+    <option value="2">Education</option>
+    <option value="3">Children</option>
+    <option value="4">Poor</option>
+    <option value="5">Piece</option>
+  </select>
+  <div *ngIf="categoryInput.invalid && (categoryInput.dirty || categoryInput.touched)">
+    <div *ngIf="categoryInput.errors?.['required']">Category is required.</div>
+  </div>
+  <br>
+
+  <button type="submit" [disabled]="fundraiserForm.invalid">Save</button>
+  <button [routerLink]="['/admin']">Cancel</button>
+</form>

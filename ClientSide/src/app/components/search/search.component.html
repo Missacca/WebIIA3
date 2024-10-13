@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="top">
+    <h1>Search for fundraisers</h1>
+  </div>
+  <div class="middle">
+    <form>
+        <label>Organizer</label>
+        <input type="text" id="organizer" [formControl]="organizerControl">
+
+        <label>City</label>
+        <input type="text" id="city" [formControl]="cityControl">
+
+        <label>Category</label>
+        <select [formControl]="categoryControl">
+          <option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </option>
+        </select>
+
+      <button (click)="onSearch()">Search</button>
+      <button (click)="onClear()">Clear</button>
+    </form>
+    <h2>Search Results</h2>
+  </div>
+  <div class="bottom">
+    <div *ngIf="fundraisers.length > 0">
+
+      <mat-card *ngFor="let fundraiser of fundraisers">
+        <h3>{{ fundraiser.CAPTION }}</h3>
+        <p>Organizer: {{ fundraiser.ORGANIZER }}</p>
+        <p>Target Funding: {{ fundraiser.TARGET_FUNDING }}</p>
+        <p>Current Funding: {{ fundraiser.CURRENT_FUNDING }}</p>
+        <p>City: {{ fundraiser.CITY }}</p>
+        <p>Category: {{ fundraiser.Category_Name }}</p>
+        <button routerLink="/fundraiser/{{fundraiser.FUNDRAISER_ID}}">View Fundraiser</button>
+      </mat-card>
+      <div *ngIf="fundraisers.length === 0">
+        <p>No fundraisers found.</p>
+      </div>
+    </div>
+    <div *ngIf="fundraisers.length === 0">
+      <h3>No Fundraiser Found</h3>
+    </div>
+  </div>
+
+</div>

@@ -81,8 +81,8 @@ let sqlCreat3 ="CREATE TABLE FUNDRAISER ( "+
                     "FUNDRAISER_ID int NOT NULL AUTO_INCREMENT,"+
 					"ORGANIZER varchar(255) NOT NULL," +
 					"CAPTION varchar(255) NOT NULL,"+
-					"TARGET_FUNDING decimal(15,2) NOT NULL,"+
-					"CURRENT_FUNDING decimal(15,2) NOT NULL,"+
+					"TARGET_FUNDING decimal(15,2) DEFAULT 0.00,"+
+					"CURRENT_FUNDING decimal(15,2) DEFAULT 0.00,"+
 					"CITY varchar(100) NOT NULL,"+
 					"ACTIVE tinyint(1) NOT NULL,"+
 					"CATEGORY_ID int DEFAULT NULL,"+

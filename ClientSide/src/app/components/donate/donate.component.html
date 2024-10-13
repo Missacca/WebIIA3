@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="top">
+    <h1>You are donating to</h1>
+  </div>
+  <div class="middle">
+    <h3>Donate to {{fundraiser.CAPTION}}</h3>
+    <p>Target Funding: {{fundraiser.TARGET_FUNDING}}</p>
+    <p>Current Funding: {{fundraiser.CURRENT_FUNDING}}</p>
+    <p>City: {{fundraiser.CITY}}</p>
+    <p>Category: {{fundraiser.Category_Name}}</p>
+
+    <div class="bottom">
+      <form (ngSubmit)="onSubmit()" #DonateForm="ngForm">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount"
+               [(ngModel)]="amount"
+               required pattern="[0-9]+"
+               #captionInput="ngModel" />
+        <div *ngIf="captionInput.invalid && (captionInput.dirty || captionInput.touched)">
+          <div *ngIf="captionInput.errors?.['required']">Amount is required.</div>
+          <div *ngIf="captionInput.errors?.['pattern']" style="color:red">Only numbers are allowed.</div>
+        </div>
+
+        <label for="giver">Your Name:</label>
+        <input type="text" id="giver" name="giver"
+               [(ngModel)]="giver"
+               required pattern="[A-Za-z\s]+"
+               #captionInput="ngModel" />
+        <div *ngIf="captionInput.invalid && (captionInput.dirty || captionInput.touched)">
+          <div *ngIf="captionInput.errors?.['required']">Name is required.</div>
+          <div *ngIf="captionInput.errors?.['pattern']" style="color:red">Only letters and spaces are allowed.</div>
+        </div>
+
+        <button type="submit">Donate</button>
+
+      </form>
+    </div>
+  </div>
+</div>

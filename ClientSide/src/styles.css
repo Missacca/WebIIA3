@@ -1,4 +1,88 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+}
+
+h1{
+  margin: 10px auto;
+}
+
+.title{
+  cursor: default;
+}
+
+.nav-spacer {
+  flex: 1 1 auto;
+}
+
+mat-card {
+  color: white;
+  padding: 15px;
+  margin: 10px 10px;
+  width: 300px;
+}
+
+mat-card-header {
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.top {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+.middle {
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+button{
+  color:black;
+  background-color: #c4c4c4;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: 1px solid #888888;
+}
+botton :hover{
+  background-color: #a8a8a8;
+}
+input, select {
+  color: black;
+  background-color: #e1e1e1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #888888;
+  font-size: 16px;
+  width: calc(100% - 42px);
+  box-sizing: border-box;
+}
+input:focus, select:focus {
+  border-color: #a8a8a8;
+  outline: none;
+}
+
+input:hover, select:hover {
+  background-color: #e0e0e0;
+}

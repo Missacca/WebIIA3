@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="top">
+    <h1>Best Funding, Good Good Fund!</h1>
+  </div>
+  <div class="middle">
+    <h2>Active Fundraisers:</h2>
+  </div>
+  <div class="bottom">
+    <mat-card *ngFor="let fundraiser of fundraisers">
+      <mat-card-header  routerLink="/fundraiser/{{fundraiser.FUNDRAISER_ID}}">
+        {{fundraiser.CAPTION}}
+      </mat-card-header>
+      <mat-card-content>
+        <li>ID: {{fundraiser.FUNDRAISER_ID}}</li>
+        <li>Organizer: {{fundraiser.ORGANIZER}}</li>
+        <li>Target Funding: {{fundraiser.TARGET_FUNDING}}</li>
+        <li>Current Funding: {{fundraiser.CURRENT_FUNDING}}</li>
+        <li>City: {{fundraiser.CITY}}</li>
+        <li>Category: {{fundraiser.Category_Name}}</li>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
