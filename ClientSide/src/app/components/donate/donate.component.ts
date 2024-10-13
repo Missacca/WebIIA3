@@ -39,11 +39,15 @@ export class DonateComponent implements OnInit {
       alert('Donation amount must be larger than $5');
       return;
     }
+    if(this.giver.length == 0){
+      alert('Please enter your name');
+      return;
+    }
 
     const donation = {
-      FUNDRAISER_ID: this.fundraiserId,
-      AMOUNT: this.amount,
-      GIVER: this.giver
+      fundraiserId: this.fundraiserId,
+      amount: this.amount,
+      giver: this.giver
     };
 
     this.dataService.CreateDonation(donation).subscribe({
