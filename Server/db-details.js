@@ -5,7 +5,7 @@
  */
 module.exports = {
     host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'crowdfunding_db'
+    user: 'zwei13_ass3_user2',
+    password: 'ass3_user',
+    database: 'zwei13_assessment_web'
 };

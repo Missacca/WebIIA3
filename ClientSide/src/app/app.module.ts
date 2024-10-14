@@ -32,6 +32,9 @@ import {
   MatTable
 } from "@angular/material/table";
 import {MatInput} from "@angular/material/input";
+import { PostpageAdminComponent } from './components/postpage-admin/postpage-admin.component';
+import { CreatPageAdminComponent } from './components/creat-page-admin/creat-page-admin.component';
+import { HomePageAdminComponent } from './components/home-page-admin/home-page-admin.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import {MatInput} from "@angular/material/input";
     FundraiserComponent,
     AlertComponent,
     DonateComponent,
+    PostpageAdminComponent,
+    CreatPageAdminComponent,
+    HomePageAdminComponent,
   ],
   imports: [
     BrowserModule,

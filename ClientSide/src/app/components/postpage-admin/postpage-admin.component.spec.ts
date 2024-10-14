@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PostpageComponent } from './postpage.component';
+import { PostpageAdminComponent } from './postpage-admin.component';
 
-describe('PostpageComponent', () => {
-  let component: PostpageComponent;
-  let fixture: ComponentFixture<PostpageComponent>;
+describe('PostpageAdminComponent', () => {
+  let component: PostpageAdminComponent;
+  let fixture: ComponentFixture<PostpageAdminComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PostpageComponent]
+      declarations: [PostpageAdminComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(PostpageComponent);
+    fixture = TestBed.createComponent(PostpageAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

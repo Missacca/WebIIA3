@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "../../data.service";
 import {Fundraiser} from "../../models/fundraiser";
-import {Category} from "../../models/category";
 import {FormControl} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {AlertComponent} from "../alert/alert.component";

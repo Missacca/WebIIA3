@@ -22,7 +22,7 @@ connection.connect()
  */
 router.get("/getActiveFundraiser", (req, res) => { // use express router to make a GET API
     connection.query( // mysql query
-        "SELECT * FROM `fundraiser` JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE `ACTIVE` = '1'", // select data which is activated
+        "SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID WHERE `ACTIVE` = '1'", // select data which is activated
         (err,records)=>{ // get result
             if(err){ // if error occurred
                 console.error("An error occurred while querying FUNDRAISER", err) // send an error message
@@ -44,7 +44,7 @@ router.get("/getActiveFundraiser", (req, res) => { // use express router to make
  */
 router.get("/getAllFundraiser", (req, res) => { // use express router to make a GET API
     connection.query( // mysql query
-        "SELECT * FROM `FUNDRAISER` ", // select data which is activated
+        "SELECT * FROM FUNDRAISER ", // select data which is activated
         (err,records)=>{ // get result
             if(err){ // if error occurred
                 console.error("An error occurred while querying FUNDRAISER", err) // send an error message
@@ -61,7 +61,7 @@ router.get("/getAllFundraiser", (req, res) => { // use express router to make a 
  */
 router.get("/getCategory", (req, res)=>{
     connection.query(
-        "SELECT * FROM `CATEGORY`", // get all categories
+        "SELECT * FROM CATEGORY", // get all categories
         (err, records)=>{
             if(err){
                 console.error("An error occurred while querying categories", err);
@@ -77,7 +77,7 @@ router.get("/getCategory", (req, res)=>{
  */
 router.get("/getOrganizer", (req, res)=>{
     connection.query(
-        "SELECT DISTINCT `ORGANIZER` FROM `FUNDRAISER`", // get all organizers
+        "SELECT DISTINCT `ORGANIZER` FROM FUNDRAISER", // get all organizers
         (err, records)=>{
             if(err){
                 console.error("An error occurred while querying organizers", err);
@@ -92,7 +92,7 @@ router.get("/getOrganizer", (req, res)=>{
  * This API will get all cities from the database
  */
 router.get("/getCity",(req, res)=>{
-   connection.query("SELECT DISTINCT `CITY` FROM `FUNDRAISER`", // get all cities
+   connection.query("SELECT DISTINCT `CITY` FROM FUNDRAISER", // get all cities
        (err, records)=>{
        if(err){
            console.error("An error occurred while querying city", err);
@@ -127,7 +127,7 @@ router.get('/getLastFundraiserId', (req, res) => {
 router.get("/searchFundraiser",(req, res)=>{
     const {city, organizer, category} = req.query; // get the query param
     /* INITIALIZE SQL */
-    let sql = "SELECT * FROM `fundraiser` JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE `ACTIVE` = '1'";
+    let sql = "SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID WHERE `ACTIVE` = '1'";
     let queryParam=[];
     /* DETECT QUERY PARAMS */
     /*
@@ -193,7 +193,7 @@ router.get("/searchFundraiser",(req, res)=>{
  */
 router.get("/getFundraiserById/:id", (req, res)=>{
     const { id } = req.params;
-    const sql = `SELECT * FROM \`fundraiser\` JOIN crowdfunding_db.category c on c.CATEGORY_ID = fundraiser.CATEGORY_ID WHERE FUNDRAISER_ID = ?`
+    const sql = `SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID WHERE FUNDRAISER_ID = ?`
     connection.execute(sql,[id],(err,records,fields) => {
         if (err) {
             console.error('Error retrieving data:', err);
@@ -208,7 +208,7 @@ router.get("/getFundraiserById/:id", (req, res)=>{
  */
 router.get('/fundraiser/:id',  (req, res) => {
     const { id } = req.params;
-    const sql=` SELECT f.FUNDRAISER_ID, f.ORGANIZER, f.CAPTION, f.TARGET_FUNDING, f.CURRENT_FUNDING,f.CITY, f.ACTIVE, f.CATEGORY_ID, c.Category_Name, d.DONATION_ID, d.DATE, d.AMOUNT, d.GIVER FROM fundraiser f LEFT JOIN category c ON f.CATEGORY_ID = c.CATEGORY_ID  LEFT JOIN  donation d ON f.FUNDRAISER_ID = d.FUNDRAISER_ID  WHERE f.FUNDRAISER_ID = ?;`
+    const sql=` SELECT FUNDRAISER.FUNDRAISER_ID, FUNDRAISER.ORGANIZER, FUNDRAISER.CAPTION, FUNDRAISER.TARGET_FUNDING, FUNDRAISER.CURRENT_FUNDING, FUNDRAISER.CITY, FUNDRAISER.ACTIVE, FUNDRAISER.CATEGORY_ID, CATEGORY.Category_Name, DONATION.DONATION_ID, DONATION.DATE, DONATION.AMOUNT, DONATION.GIVER FROM FUNDRAISER LEFT JOIN CATEGORY ON FUNDRAISER.CATEGORY_ID = CATEGORY.CATEGORY_ID  LEFT JOIN  DONATION ON FUNDRAISER.FUNDRAISER_ID = DONATION.FUNDRAISER_ID  WHERE FUNDRAISER.FUNDRAISER_ID = ?;`
     connection.execute(sql,[id],(err,records,fields) => {
         if (err) {
             console.error('Error retrieving data:', err);
@@ -224,7 +224,7 @@ router.get('/fundraiser/:id',  (req, res) => {
  */
 router.get("/getDonation/:id", (req, res) => {
     const { id } = req.params;
-    const sql = `SELECT * FROM donation WHERE FUNDRAISER_ID = ?`
+    const sql = `SELECT * FROM DONATION WHERE FUNDRAISER_ID = ?`
     connection.execute(sql,[id],(err,records,fields) => {
         if (err) {
             console.error('Error retrieving data:', err);
@@ -241,8 +241,8 @@ router.post("/donation", (req, res) => {
     // Generate a date message
     const date = new Date();
     // initialize sql query
-    let sql1 = `INSERT INTO donation (AMOUNT, GIVER, FUNDRAISER_ID, DATE) VALUES (?,?,?,?)`
-    let sql2 = `UPDATE fundraiser SET CURRENT_FUNDING = CURRENT_FUNDING + ? WHERE FUNDRAISER_ID = ?`
+    let sql1 = `INSERT INTO DONATION (AMOUNT, GIVER, FUNDRAISER_ID, DATE) VALUES (?,?,?,?)`
+    let sql2 = `UPDATE FUNDRAISER SET CURRENT_FUNDING = CURRENT_FUNDING + ? WHERE FUNDRAISER_ID = ?`
     // First query to add a donation record
     connection.execute(sql1,[amount,giver,fundraiserId,date],(err, records)=>{
         if(err){
@@ -272,7 +272,7 @@ router.post("/fundraiser", (req, res) => {
     let categoryId = req.body.categoryId;
     let active = req.body.active;
     // initialize sql query
-    let sql = `INSERT INTO fundraiser(ORGANIZER, CAPTION, TARGET_FUNDING, CITY, CATEGORY_ID, ACTIVE) VALUES(?,?,?,?,?,?)`
+    let sql = `INSERT INTO FUNDRAISER(ORGANIZER, CAPTION, TARGET_FUNDING, CITY, CATEGORY_ID, ACTIVE) VALUES(?,?,?,?,?,?)`
 
     connection.execute(sql,[organizer, caption, targetFunding, city, categoryId,active],(err, records)=>{
         if(err){
@@ -297,7 +297,7 @@ router.put("/fundraiser/:id", (req, res) => {
     let categoryId = req.body.categoryId;
     let active = req.body.active;
     // initialize sql query
-    let sql= `UPDATE fundraiser SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ?, ACTIVE = ? WHERE FUNDRAISER_ID = ?`; // initialize sql command
+    let sql= `UPDATE FUNDRAISER SET ORGANIZER = ?, CAPTION = ?, TARGET_FUNDING = ?, CITY = ?, CATEGORY_ID = ?, ACTIVE = ? WHERE FUNDRAISER_ID = ?`; // initialize sql command
     let values = [organizer, caption, targetFunding, city, categoryId, active, id];
 
     connection.query(sql, values,(err,records)=>{
@@ -317,7 +317,7 @@ router.delete('/deleteFundraiser/:id', (req, res) => {
     const id = req.params.id;
 
     // SQL query to delete donations related to the fundraiser first
-    let deleteDonations = `DELETE FROM donation WHERE FUNDRAISER_ID = ?`;
+    let deleteDonations = `DELETE FROM DONATION WHERE FUNDRAISER_ID = ?`;
 
     // Execute the first SQL to delete related donations
     connection.execute(deleteDonations, [id], (err, result) => {
@@ -327,7 +327,7 @@ router.delete('/deleteFundraiser/:id', (req, res) => {
         }
 
         // Proceed to delete the fundraiser even if no donations were found
-        const deleteFundraiserSql = `DELETE FROM fundraiser WHERE FUNDRAISER_ID = ?`;
+        const deleteFundraiserSql = `DELETE FROM FUNDRAISER WHERE FUNDRAISER_ID = ?`;
 
         connection.execute(deleteFundraiserSql, [id], (err, result) => {
             if (err) {

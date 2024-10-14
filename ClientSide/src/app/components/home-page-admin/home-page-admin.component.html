@@ -1,0 +1,91 @@
+
+<h1 style="text-align: center">Admin Page</h1>
+<div id="search">
+  <form>
+    <label>Organizer</label>
+    <input type="text" id="organizer" [formControl]="organizerControl">
+
+    <label>City</label>
+    <input type="text" id="city" [formControl]="cityControl">
+
+    <label>Category</label>
+    <select [formControl]="categoryControl">
+      <option *ngFor="let category of categories" [value]="category">
+        {{ category }}
+      </option>
+    </select>
+
+    <button (click)="onSearch()">Search</button>
+    <button (click)="onClear()">Clear</button>
+  </form>
+  <button [routerLink]="['/add']"> + Create New Fundraiser</button>
+  <table *ngIf="selectedFundraiser.length > 0" class="table" >
+    <thead id="searchTable">
+    <tr>
+      <th>ID</th>
+      <th>Organizer</th>
+      <th>Caption</th>
+      <th>Target Funding</th>
+      <th>Current Funding</th>
+      <th>City</th>
+      <th>Category</th>
+      <th>Active</th>
+      <th>Option</th>
+    </tr>
+    </thead>
+    <tbody *ngFor="let currentFundraiser of selectedFundraiser">
+    <tr>
+      <td>{{ currentFundraiser.FUNDRAISER_ID }}</td>
+      <td>{{ currentFundraiser.ORGANIZER }}</td>
+      <td>{{ currentFundraiser.CAPTION}}</td>
+      <td>{{ currentFundraiser.TARGET_FUNDING }}</td>
+      <td>{{ currentFundraiser.CURRENT_FUNDING}}</td>
+      <td>{{ currentFundraiser.CITY}}</td>
+      <td>{{ currentFundraiser.Category_Name}}</td>
+      <td>
+        <div *ngIf="currentFundraiser.ACTIVE">TRUE</div>
+        <div *ngIf="!currentFundraiser.ACTIVE">FALSE</div>
+      </td>
+      <td>
+        <button [routerLink]="['/Change']" [queryParams]="{ id: currentFundraiser.FUNDRAISER_ID }">Update</button>
+        <button (click)="deleteFundraiser(currentFundraiser.FUNDRAISER_ID)">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<table class="table" id="fundraiserTable">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Organizer</th>
+    <th>Caption</th>
+    <th>Target Funding</th>
+    <th>Current Funding</th>
+    <th>City</th>
+    <th>Category</th>
+    <th>Active</th>
+    <th>Option</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fundraiser of this.fundraisers">
+    <td>{{ fundraiser.FUNDRAISER_ID }}</td>
+    <td>{{ fundraiser.ORGANIZER }}</td>
+    <td>{{ fundraiser.CAPTION}}</td>
+    <td>{{ fundraiser.TARGET_FUNDING }}</td>
+    <td>{{ fundraiser.CURRENT_FUNDING}}</td>
+    <td>{{ fundraiser.CITY}}</td>
+    <td>{{ fundraiser.Category_Name}}</td>
+    <td>
+      <div *ngIf="fundraiser.ACTIVE">TRUE</div>
+      <div *ngIf="!fundraiser.ACTIVE">FALSE</div>
+    </td>
+    <td>
+      <button [routerLink]="['/Change']" [queryParams]="{ id: fundraiser.FUNDRAISER_ID }">Update</button>
+      <button (click)="deleteFundraiser(fundraiser.FUNDRAISER_ID)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+
+</table>

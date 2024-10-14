@@ -59,7 +59,7 @@ button[type="submit"]:hover {
 }
 
 button {
-  background-color: #e67e22; /* 取消按钮颜色 */
+  background-color: #e67e22;
   color: white;
   border: none;
   border-radius: 5px;
@@ -70,7 +70,7 @@ button {
 }
 
 button:hover {
-  background-color: #d35400; /* 取消按钮悬停效果 */
+  background-color: #d35400;
 }
 
 /* 响应式设计 */
