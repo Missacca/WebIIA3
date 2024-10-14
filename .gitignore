@@ -22,3 +22,4 @@ tests/
 .env.local
 .vscode-server/
 .history/
+*.sql

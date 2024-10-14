@@ -44,7 +44,7 @@ router.get("/getActiveFundraiser", (req, res) => { // use express router to make
  */
 router.get("/getAllFundraiser", (req, res) => { // use express router to make a GET API
     connection.query( // mysql query
-        "SELECT * FROM FUNDRAISER ", // select data which is activated
+        "SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID", // select data which is activated
         (err,records)=>{ // get result
             if(err){ // if error occurred
                 console.error("An error occurred while querying FUNDRAISER", err) // send an error message
