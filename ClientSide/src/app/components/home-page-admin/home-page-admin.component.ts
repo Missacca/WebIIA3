@@ -59,6 +59,7 @@ export class HomePageAdminComponent implements OnInit{
     });
   }
   onSearch() {
+    const active:number = 0;
     const organizer = this.organizerControl.value;
     const city = this.cityControl.value;
     const category = this.categoryControl.value;
@@ -67,7 +68,7 @@ export class HomePageAdminComponent implements OnInit{
       return;
     }
 
-    this.fundraiserService.searchFundraiser(organizer, city, category).subscribe(fundraisers => {
+    this.fundraiserService.searchFundraiser(active, organizer, city, category).subscribe(fundraisers => {
       this.selectedFundraiser = fundraisers;
     });
   }

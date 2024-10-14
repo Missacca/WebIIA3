@@ -31,9 +31,9 @@ export class DataService {
   public getCategories():Observable<Category[]> {
     return this.http.get<Category[]>(this.url + '/getCategory');
   }
-  public searchFundraiser(organizer?: string, city?: string, category?: string): Observable<Fundraiser[]> {
+  public searchFundraiser(active:number, organizer?: string, city?: string, category?: string): Observable<Fundraiser[]> {
     let params = new HttpParams();
-
+    params = params.append('active',active)
     if (organizer) {
       params = params.append('organizer', organizer);
     }

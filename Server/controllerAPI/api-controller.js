@@ -120,15 +120,22 @@ router.get('/getLastFundraiserId', (req, res) => {
 /**
  * GET Specific category fundraiser
  * This method will need user select specific category to search fundraisers
+ * @param active
  * @param city
  * @param organizer
  * @param category
  */
 router.get("/searchFundraiser",(req, res)=>{
-    const {city, organizer, category} = req.query; // get the query param
+    const {active, city, organizer, category} = req.query; // get the query param
     /* INITIALIZE SQL */
-    let sql = "SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID WHERE `ACTIVE` = '1'";
+    let sql = "SELECT * FROM FUNDRAISER JOIN CATEGORY ON CATEGORY.CATEGORY_ID = FUNDRAISER.CATEGORY_ID WHERE (`ACTIVE`";
     let queryParam=[];
+    if(active == 1){
+        sql +=" = 1)"
+    }
+    if(active == 0){
+        sql +=" = 1 OR ACTIVE = 0)"
+    }
     /* DETECT QUERY PARAMS */
     /*
     This part of code will detect the user input settings.

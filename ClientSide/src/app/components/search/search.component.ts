@@ -28,6 +28,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch() {
+    const active:number = 1;
     const organizer = this.organizerControl.value;
     const city = this.cityControl.value;
     const category = this.categoryControl.value;
@@ -36,7 +37,7 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    this.dataService.searchFundraiser(organizer, city, category).subscribe(fundraisers => {
+    this.dataService.searchFundraiser(active, organizer, city, category).subscribe(fundraisers => {
       this.fundraisers = fundraisers;
     });
   }
